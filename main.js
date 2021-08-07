@@ -5,60 +5,42 @@ const playersAmountInput = document.querySelector(".players-amount-input");
 const initButton = document.querySelector(".init-session");
 const resetButton = document.querySelector(".reset-session");
 
-let sessionStarted = false;
+let playersCount = 0;
 
 const playerWidth = 600;
 const playerHeight = 339;
 
-const sessionInit = () => {
-    if (isNaN(playersAmountInput.value)) {
-        playersAmountInput.value = "";
 
-        return
-    }
-
-    if (!sessionStarted) {
-        for (let i = 0; i < playersAmountInput.value; i++) {
-            playerWrapperInit(sessionWrapper, i);
-        }
-    }
-
-    playersAmountInput.value = "";
-    
-    sessionStarted = true;
-}
-initButton.addEventListener("click", sessionInit);
-
-const playerWrapperInit = (sessionWrapper, i) => {
+const playerWrapperInit = (sessionWrapper, playersCount) => {
     const playerWrapper = document.createElement("div");
     playerWrapper.className = "player-wrapper";
     sessionWrapper.append(playerWrapper);
 
-    playerPlaceholderInit(playerWrapper, i);
-    urlNavigationWrapperInit(playerWrapper, i);
+    playerPlaceholderInit(playerWrapper, playersCount);
+    urlNavigationWrapperInit(playerWrapper, playersCount);
 }
 
-const playerPlaceholderInit = (playerWrapper, i) => {
+const playerPlaceholderInit = (playerWrapper, playersCount) => {
     const playerPlaceholder = document.createElement("div");
 
     playerPlaceholder.className = "player-placeholder";
-    playerPlaceholder.id = `player-placeholder-${i}`;
+    playerPlaceholder.id = `player-placeholder-${playersCount}`;
     playerPlaceholder.style.width = playerWidth + "px";
     playerPlaceholder.style.height = playerHeight + "px";
 
     playerWrapper.append(playerPlaceholder);
 }
 
-const urlNavigationWrapperInit = (playerWrapper, i) => {
+const urlNavigationWrapperInit = (playerWrapper, playersCount) => {
     const urlNavigationWrapper = document.createElement("div");
     urlNavigationWrapper.className = "url-navigation-wrapper"
 
     playerWrapper.append(urlNavigationWrapper);
 
-    urlNavigationInit(urlNavigationWrapper, i);
+    urlNavigationInit(urlNavigationWrapper, playersCount);
 }
 
-const urlNavigationInit = (urlNavigationWrapper, i) => {
+const urlNavigationInit = (urlNavigationWrapper, playersCount) => {
     const urlInput = document.createElement("input");
     urlInput.className = "url-input";
     urlInput.type = "text";
@@ -71,19 +53,34 @@ const urlNavigationInit = (urlNavigationWrapper, i) => {
     urlNavigationWrapper.append(urlInput, startStreamButton);
 
     startStreamButton.addEventListener("click", (e) => {
-        startStream(e, i, urlInput.value)
+        startStream(e, urlInput.value, playersCount)
     });
 }
 
-const startStream = (e, i, urlInputValue) => {
-    restartPlayer(e)
-
-    playerInit(i, urlInputValue)
+const clearInput = (input) => {
+    input.value = "";
 }
 
-const playerInit = (i, urlInputValue) => {
+const sessionInit = () => {
+    for (let i = 0; i < playersAmountInput.value; i++) {
+        playerWrapperInit(sessionWrapper, playersCount);
+
+        playersCount++;
+    }
+
+    clearInput(playersAmountInput);
+}
+initButton.addEventListener("click", sessionInit);
+
+const startStream = (e, urlInputValue, playersCount) => {
+    restartPlayer(e)
+
+    playerInit(urlInputValue, playersCount)
+}
+
+const playerInit = (urlInputValue, playersCount) => {
     SLDP.init({
-        container:          `player-placeholder-${i}`,
+        container:          `player-placeholder-${playersCount}`,
         stream_url:         urlInputValue,
         initial_resolution: '240p',
         buffering:          500,
@@ -95,8 +92,10 @@ const playerInit = (i, urlInputValue) => {
 }
 
 const restartPlayer = (e) => {
-    if (e.target.parentNode.previousSibling.firstElementChild && e.target.parentNode.previousSibling.firstElementChild.classList.contains("sldp_player_wrp")) {
-        e.target.parentNode.previousSibling.firstElementChild.remove();
+    const player = e.target.parentNode.previousSibling.firstElementChild;
+
+    if (player && player.classList.contains("sldp_player_wrp")) {
+        player.remove();
     }
 }
 
@@ -107,8 +106,6 @@ const resetSession = () => {
         player.remove();
     })
  
-    sessionStarted = false;
-
-    playersAmountInput.value = "";
+    clearInput(playersAmountInput);
 }
 resetButton.addEventListener("click", resetSession);
