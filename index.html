@@ -9,17 +9,28 @@
         <title>Live Stream</title>
     </head>
     <body>
+        <!-- Starting screen -->
+        <div class="starting-screen-wrapper">
+            <button class="new-session buttons">New Session</button>
+            <button class="recent-session buttons">Recent Session</button>
+        </div>
+        <!-- Main navigation -->
         <div class="main-navigation">
-            <div class="players-input">
-                <label class="players-required" for="players-amount">Players required</label>
-                <input type="text" id="players-amount" class="players-amount-input" size="1">
+            <div class="players-required-wrapper">
+                <label class="players-required" for="players-length">Players required:</label>
+                <input type="text" id="players-length" class="players-length-input">
+                <button class="add-players buttons">Add Players</button>
             </div>
-    
-            <input type="submit" value="Start Session" class="init-session button">
-            <input type="submit" value="Reset Session" class="reset-session button">
+            <button class="reset-session buttons">Reset Session</button>
         </div>
 
+        <!-- Players section -->
         <div class="session-wrapper"></div>
+
+        <!-- Footer -->
+        <div class="footer">Powered by ©todjiaa. Email: info@todjiaa.com</div>
+
+        <!-- JS File -->
         <script src="main.js"></script>
     </body>
 </html>

@@ -8,6 +8,42 @@ body {
     background-color: #ffffff;
 }
 
+.buttons {
+    padding: 16px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 4px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.buttons:hover {
+    background-color: #dcecdd;
+}
+
+.starting-screen-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: burlywood;
+}
+
+.new-session {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
+.recent-session {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
 .main-navigation {
     display: flex;
     justify-content: space-around;
@@ -15,46 +51,32 @@ body {
     padding: 20px;
 }
 
-.players-required {
-    font-size: 20px;
-}
-
-.players-input {
+.players-required-wrapper {
     display: flex;
     align-items: center;
 }
 
-.players-amount-input {
+.players-required {
+    font-size: 20px;
+}
+
+.players-length-input {
     text-align: center;
     font-size: 32px;
-    margin-left: 10px;
-    padding: 4px;
+    width: 45px;
+    margin-left: 2px;
+    padding: 2px 2px;
     border: 2px solid #4CAF50;
     color: rgb(85, 85, 85);
     outline: none;
     transition-duration: 0.4s;
 }
 
-.players-amount-input:focus {
+.players-length-input:focus {
     background-color: #dcecdd;
 }
 
-.button {
-    border: none;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: #dcecdd;
-  }
-
-.init-session {
+.add-players {
     background-color: white; 
     color: black; 
     border: 2px solid #4CAF50;
@@ -71,6 +93,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
 .player-wrapper {
@@ -94,6 +117,7 @@ body {
     box-sizing: border-box;
     outline: none;
     font-size: 16px;
+    transition-duration: 0.4s;
 }
 
 .url-input:focus {
@@ -116,4 +140,10 @@ body {
     background-color: #dcecdd;
 }
 
-
+.footer {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: rgb(34, 34, 34);
+    font-size: 14px;
+}
