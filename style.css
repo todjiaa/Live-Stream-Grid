@@ -107,6 +107,7 @@ body {
 }
 
 .url-navigation-wrapper {
+    display: flex;
     width: 100%;
 }
 
@@ -146,4 +147,48 @@ body {
     text-align: center;
     color: rgb(34, 34, 34);
     font-size: 14px;
+}
+
+@media only screen and (max-width: 550px) {
+    .buttons {
+        padding: 10px 10px;
+        height: 55px;
+        font-size: 14px;
+        cursor: none;
+    }
+    
+    .buttons:hover {
+        background-color: transparent;
+    }
+    
+    .players-required-wrapper {
+        justify-content: flex-start;
+    }
+    
+    .players-required {
+        width: 63px;
+        font-size: 17px;
+    }
+    
+    .players-length-input {
+        margin-left: 2px;
+    }
+    
+    .url-input {
+        font-size: inherit;
+    }
+    
+    
+    .start-stream-button {
+        font-size: 14px;
+        cursor: none;
+    }
+    
+    .start-stream-button:hover {
+        background-color: transparent;
+    }
+    
+    .footer {
+        font-size: 13px;
+    }
 }

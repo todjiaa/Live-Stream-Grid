@@ -9,7 +9,11 @@ const playersLengthInput = document.querySelector(".players-length-input");
 const addPlayersButton = document.querySelector(".add-players");
 const resetButton = document.querySelector(".reset-session");
 
-let scrollHeight = document.documentElement.scrollHeight;
+let scrollHeight = Math.max(
+    document.body.scrollHeight, document.documentElement.scrollHeight,
+    document.body.offsetHeight, document.documentElement.offsetHeight,
+    document.body.clientHeight, document.documentElement.clientHeight
+);
 
 const footer = document.querySelector(".footer");
 
@@ -24,6 +28,39 @@ let activePlayers = 0;
 
 const playerWidth = 600;
 const playerHeight = 339;
+
+// Set the widht and height of the video player placeholder
+const setWidthHeight = (element, width, height) => {
+    element.style.width = width + "px";
+    element.style.height = height + "px";
+}
+
+
+// Get and set the width and height for the player and the player placeholder dynamically depending on the size of the screen
+const playerSize = (playerPlaceholder) => {
+    let width = playerWidth;
+    let height = playerHeight;
+
+    const ratio = playerWidth/playerHeight;
+
+    if (window.innerWidth < playerWidth) {
+        width = document.documentElement.clientWidth;
+        height = width / ratio;
+
+        setWidthHeight(playerPlaceholder, width, height);
+    }
+    else {
+        width = playerWidth;
+        height = playerHeight;
+
+        setWidthHeight(playerPlaceholder, width, height);
+    }
+
+    return {
+        width: width,
+        height: height
+    }
+}
 
 // Hide element
 const hideElement = (element) => {
@@ -111,10 +148,12 @@ const playerPlaceholderInit = (playerWrapper, playersInUse) => {
 
     playerPlaceholder.className = "player-placeholder";
     playerPlaceholder.id = `player-placeholder-${playersInUse}`;
-    playerPlaceholder.style.width = playerWidth + "px";
-    playerPlaceholder.style.height = playerHeight + "px";
+    // playerPlaceholder.style.width = playerWidth + "px";
+    // playerPlaceholder.style.height = playerHeight + "px";
 
     playerWrapper.append(playerPlaceholder);
+
+    playerSize(playerPlaceholder);
 }
 
 // Create each player Navigation wrapper
@@ -132,10 +171,11 @@ const urlNavigationInit = (urlNavigationWrapper, playersInUse) => {
     const urlInput = document.createElement("input");
     urlInput.className = "url-input";
     urlInput.type = "text";
+    urlInput.placeholder = "Enter URL"
     
     const startStreamButton = document.createElement("button");
     startStreamButton.className = "start-stream-button";
-    startStreamButton.type = "button";
+    // startStreamButton.type = "button";
     startStreamButton.innerHTML = "Start stream";
 
     urlNavigationWrapper.append(urlInput, startStreamButton);
@@ -158,7 +198,12 @@ const addPlayersPlaceholders = (length) => {
 
         storePlayersLengthInLocalStorage(playersInUse);
     }
-    scrollHeight = document.documentElement.scrollHeight;
+
+    let scrollHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+    );
 
     positionToBottom(footer, scrollHeight);
 
@@ -181,6 +226,16 @@ const startStream = (e, urlInputValue, playersInUse) => {
 
 // Create the players
 const playerInit = (urlInputValue, playersInUse) => {
+    const playerPlaceholder = document.querySelectorAll(".player-placeholder");
+
+    let activeWidth;
+    let activeHeight;
+
+    playerPlaceholder.forEach(placeholder => {
+        activeWidth = playerSize(placeholder).width;
+        activeHeight = playerSize(placeholder).height;
+    })
+
     SLDP.init({
         container:          `player-placeholder-${playersInUse}`,
         stream_url:         urlInputValue,
@@ -188,8 +243,8 @@ const playerInit = (urlInputValue, playersInUse) => {
         buffering:          500,
         autoplay:           true,
         muted:              true,
-        width:              playerWidth,
-        height:             playerHeight,
+        width:              activeWidth,
+        height:             activeHeight,
         fullscreen:         activePlayers === 1 ? true : false
     })
 }
@@ -219,7 +274,7 @@ const resetSession = () => {
  
     clearInput(playersLengthInput);
 
-    positionToBottom(footer, window.innerHeight);
+    positionToBottom(footer, scrollHeight);
 
     playersInUse = 0;
     activePlayers = 0;
